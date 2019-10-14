@@ -5,34 +5,61 @@ export default class Tree extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            values: []
+            values: [],
+            i: 0
         }
+        this.HEIGHT = 4;
+        this.updateValues = this.updateValues.bind(this);
+        this.renderNode = this.renderNode.bind(this);
+    }
+
+    createArray(len, itm) {
+        var arr1 = [itm],
+            arr2 = [];
+        while (len > 0) {
+            if (len & 1) arr2 = arr2.concat(arr1);
+            arr1 = arr1.concat(arr1);
+            len >>>= 1;
+            // geez... this is sorcery from StackOverflow
+            // don't blame on me
+        }
+        return arr2;
     }
 
     componentDidMount() {
-        var values = [];
-        var i;
-        for (i = 0; i++; i<15) {
-            values.push(null);
-        }
+        var values = this.createArray(15, null);
+        console.log(values);
         this.setState({
             values: values
         })
     }
 
-    renderNode(height=1, x, xOrigin, limit=4) {
+    updateValues(i, value) {
+        var values = this.state.values;
+        values[i] = value;
+        this.setState({
+            values: values
+        })
+        console.log(values);
+    }
+
+    renderNode(height=1, x, xOrigin, limit=4, i) {
         var node = (
             <Node
+                i={i}
                 y={height*100}
                 x={x/2}
+                updateValues={this.updateValues}
             />
         )
 
-        if (height == limit) {
+        if (height === limit) {
             return (node)
         }
 
         const step = xOrigin / 2**(height);
+        const leftI = i+1;
+        const rightI = i+(2**(this.HEIGHT-height));
 
         return (
             <>
@@ -80,9 +107,9 @@ export default class Tree extends React.Component {
                         }}
                     />
                 </svg>
-                {this.renderNode(height+1, x-step, xOrigin, limit)}
+                {this.renderNode(height+1, x-step, xOrigin, limit, leftI)}
                 {node}
-                {this.renderNode(height+1, x+step, xOrigin, limit)}
+                {this.renderNode(height+1, x+step, xOrigin, limit, rightI)}
             </>
         )
     }
@@ -97,6 +124,6 @@ export default class Tree extends React.Component {
     }
 
     render() {
-        return(this.renderNode(1, 800, 800, 4))
+        return(this.renderNode(1, 800, 800, this.HEIGHT, 0))
     }
 }

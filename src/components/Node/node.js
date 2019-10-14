@@ -3,6 +3,12 @@ import React from 'react'
 export default class Node extends React.Component {
     constructor(props) {
         super(props);
+        this.handleChange = this.handleChange.bind(this);
+    }
+
+    handleChange(e) {
+        const value = parseInt(e.target.value);
+        this.props.updateValues(this.props.i, value);
     }
 
     render() {
@@ -20,6 +26,7 @@ export default class Node extends React.Component {
             >
                 <input
                     type='number'
+                    onChange={this.handleChange}
                     style={{
                         width: 60,
                         marginLeft: 7,
