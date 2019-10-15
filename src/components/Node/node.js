@@ -25,11 +25,10 @@ export default class Node extends React.Component {
             }}
             >
                 <input
-                    type='number'
                     onChange={this.handleChange}
                     style={{
                         width: 60,
-                        marginLeft: 7,
+                        marginLeft: 3,
                         marginTop: 29
                     }}
                 />
