@@ -1,4 +1,8 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Alunos  
+| Matrícula | Nome |  
+|-----------------------|---------------------|  
+| 16/0119316 | Ezequiel De Oliveira |  
+| 16/0049971 | Filipe Toyoshima |  
 
 ## Available Scripts
 
