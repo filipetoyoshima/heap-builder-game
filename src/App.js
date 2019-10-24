@@ -1,5 +1,4 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 import Tree from '../src/components/Tree/tree';
 
@@ -7,7 +6,8 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      nums: []
+      nums: [],
+      heap: []
     }
   }
 
@@ -20,14 +20,43 @@ class App extends React.Component {
     this.setState({ nums: array });
   }
 
+  insertInHeap = (index) => {
+    let heap = this.state.heap;
+    let nums = this.state.nums;
+    heap.push(nums[index]);
+    nums.splice(index, 1);
+    console.log(heap, nums);
+
+    this.setState({
+      heap,
+      nums
+    });
+
+  }
+
+  removeFromHeap = (index) => {
+    let heap = this.state.heap;
+    let nums = this.state.nums;
+    console.log(heap.slice(index));
+    nums = nums.concat(heap.slice(index));
+    heap.splice(index);
+
+
+    this.setState({
+      heap,
+      nums
+    });
+
+  }
+
   render() {
     return (
       <div style={styles.container}>
         <h2>Tente Inserir na heap:</h2>
         <div style={styles.array}>
-          {this.state.nums.map((num, index) => index !== 14 ? <h2 key={index}> {num}, </h2> : <h2 key={index} > {num}</h2>)}
+          {this.state.nums.map((num, index) => <button onClick={() => { this.insertInHeap(index) }} style={styles.circle} key={index} > {num}</button>)}
         </div>
-        <Tree />
+        <Tree heap={this.state.heap} removeFromHeap={this.removeFromHeap} />
       </div >
     );
   }
@@ -46,6 +75,18 @@ const styles = {
     justifyContent: 'center',
     flexDirection: 'row',
     marginTop: '-25px'
+  },
+  circle: {
+    background: 'blue',
+    width: 40,
+    height: 40,
+    borderRadius: 40,
+    zIndex: 999,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    color: 'white',
+    margin: 10
   }
 }
 
