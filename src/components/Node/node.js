@@ -24,14 +24,15 @@ export default class Node extends React.Component {
                 zIndex: 999,
             }}
             >
-                <input
+{/*                 <input
                     onChange={this.handleChange}
                     style={{
                         width: 60,
                         marginLeft: 3,
                         marginTop: 29
                     }}
-                />
+                /> */}
+                <h1>{this.props.num}</h1>
             </div>
         )
     }
