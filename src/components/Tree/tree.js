@@ -1,6 +1,5 @@
 import React from 'react';
 import Node from '../Node/node';
-import Button from '@material-ui/core/Button';
 
 
 export default class Tree extends React.Component {
@@ -37,20 +36,6 @@ export default class Tree extends React.Component {
         return (x * y) / z;
     }
 
-    isHeap(arr, i, n) {
-        // If a leaf node 
-        if (i > (n - 2) / 2)
-            return true;
-
-        // If an internal node and is greater than its children, and 
-        // same is recursively true for the children 
-        if (arr[i] >= arr[2 * i + 1] && arr[i] >= arr[2 * i + 2] &&
-            this.isHeap(arr, 2 * i + 1, n) && this.isHeap(arr, 2 * i + 2, n))
-            return true;
-
-        return false;
-    }
-
     render() {
         const { heap } = this.props;
         return (
@@ -66,7 +51,7 @@ export default class Tree extends React.Component {
                                     y={(this.depthOfIndex(index, heap) + 1.5) * 100}
                                     x={this.nodePosition(index, heap)}
                                     num={num}
-                                    updateValues={this.updateValues}
+                                    color={this.props.color}                                    
                                 />
                                 {
                                     index >= 1 ?

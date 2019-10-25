@@ -14,7 +14,7 @@ export default class Node extends React.Component {
     render() {
         return (
             <button style={{
-                background: 'blue',
+                background: this.props.color,
                 width: 80,
                 height: 80,
                 borderRadius: 40,
