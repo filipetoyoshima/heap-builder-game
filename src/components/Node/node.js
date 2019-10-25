@@ -13,8 +13,8 @@ export default class Node extends React.Component {
 
     render() {
         return (
-            <div style={{
-                background: 'blue',
+            <button style={{
+                background: this.props.color,
                 width: 80,
                 height: 80,
                 borderRadius: 40,
@@ -22,17 +22,17 @@ export default class Node extends React.Component {
                 top: this.props.y,
                 left: this.props.x,
                 zIndex: 999,
+                display: 'flex',
+                justifyContent: 'center',
+                color: 'white'
             }}
+
+                onClick={() => {
+                    this.props.onClick()
+                }}
             >
-                <input
-                    onChange={this.handleChange}
-                    style={{
-                        width: 60,
-                        marginLeft: 3,
-                        marginTop: 29
-                    }}
-                />
-            </div>
+                <h1>{this.props.num}</h1>
+            </button>
         )
     }
 }
