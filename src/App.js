@@ -19,8 +19,8 @@ class App extends React.Component {
     let array = [];
     for (let i = 0; i < 15; i++) {
       let num = Math.floor(Math.random() * 100);
-      if(!array.includes(num)){
-        array[i] = num; 
+      if (!array.includes(num)) {
+        array[i] = num;
       } else {
         array[i] = num * 2;
       }
@@ -56,6 +56,29 @@ class App extends React.Component {
       nums
     });
 
+  }
+
+  parent = (index) => {
+    let x = Math.floor((index - 1) / 2);
+    return x;
+  }
+
+  heapify = (index, arr) => {
+    let right = (2 * index + 1) + 1;
+    let left = (2 * index + 1);
+    let largest = arr[index];
+
+    if (index < arr.length && arr[left] > arr[index]) {
+      largest = left;
+    }
+
+    if (index < arr.length && arr[right] > arr[index]) {
+      largest = right;
+    }
+
+    if(largest !== index){
+      this.heapify(largest,arr);
+    }
   }
 
   removeFromHeap = (index) => {
