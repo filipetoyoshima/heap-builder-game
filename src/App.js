@@ -13,7 +13,8 @@ class App extends React.Component {
       initialArr: [],
       heapFlag: ':|',
       color: 'blue',
-      selectedItem: null
+      selectedItem: null,
+      finished: false,
     }
   }
 
@@ -89,26 +90,35 @@ class App extends React.Component {
     }
   }
 
-  heapup = (index, arr) => {
+  heapup = async (index, arr) => {
     let parent = this.parent(index);
-    if (parent >= 0 && arr[parent] < arr[index]) {
+
+    if (parent >= 0 && arr[parent].number < arr[index].number) {
+
       this.swap(parent, index, arr);
-      this.heapup(parent, arr);
+
+      await this.heapup(parent, arr);
     }
   }
 
 
   heapAnswer = async () => {
-    this.setState({ nums: this.state.initialArr, heap: [] });
+    this.setState({ nums: this.state.initialArr.slice(0), heap: [] });
+    this.setState({ color: 'blue', heapFlag: ':|' })
     let nums = await this.state.nums;
     let heap = this.state.heap;
-    for(let i = 0; i < nums.length; i++){
-      console.log(i);
-      this.insertInHeap(i);
-      this.heapup(i,heap);
-      this.setState({heap})
-      await this.sleep(3000);
+    let initial = this.state.initialArr
+    for (let i = 0; i < initial.length; i++) {
+      heap[i] = nums[i];
+      this.setState({ heap, nums })
+      await this.sleep(1000);
+      await this.heapup(i, heap);
+      this.setState({ heap })
+      await this.sleep(500);
     }
+
+    this.setState({ finished: true })
+
   }
 
 
@@ -135,10 +145,15 @@ class App extends React.Component {
 
   }
 
-  swap = (indexX, indexY, arr) => {
+  swap = async (indexX, indexY, arr) => {
     let aux = arr[indexX];
     arr[indexX] = arr[indexY];
+    arr[indexX].marked = true;
     arr[indexY] = aux;
+    arr[indexY].marked = true;
+    await this.sleep(500);
+    arr[indexX].marked = false;
+    arr[indexY].marked = false;
 
   }
 
@@ -174,8 +189,8 @@ class App extends React.Component {
       <div style={styles.container}>
         <div style={{ display: 'flex', flexDirection: 'row' }}>
           {
-            this.state.nums.length ?
-              <div style={{display: 'flex', flexDirection: 'column'}}>
+            this.state.nums.length && !this.state.finished ?
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
                 <h2>Tente Inserir na heap:</h2>
                 {this.chooseNumber()}
               </div>
@@ -203,13 +218,23 @@ class App extends React.Component {
             onClick={() => {
               this.heapAnswer();
             }}
-            style={{ zIndex: 9999,marginRight: 0, marginTop: 50, marginBottom: 50, left: '150px', borderRadius: '50px' }}
+            style={{ zIndex: 9999, marginRight: 0, marginTop: 50, marginBottom: 50, left: '110px', borderRadius: '50px' }}
           >
             Answer
           </Button>
-        </div>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => {
+              window.location.reload();
+            }}
+            style={{ zIndex: 9999, marginRight: 0, marginTop: 50, marginBottom: 50, left: '130px', borderRadius: '50px' }}
+          >
+            Again!
+          </Button>
+      </div>
 
-        <Tree heap={this.state.heap} selectItem={this.selectItem} color={this.state.color} />
+      <Tree heap={this.state.heap} selectItem={this.selectItem} color={this.state.color} nums={this.state.num} initialArr={this.state.initialArr} />
       </div >
     );
   }
