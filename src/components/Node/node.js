@@ -14,7 +14,7 @@ export default class Node extends React.Component {
     render() {
         return (
             <button style={{
-                background: this.props.color,
+                background: this.props.num.marked ? '#00ffcc' : this.props.color,
                 width: 80,
                 height: 80,
                 borderRadius: 40,
@@ -31,7 +31,7 @@ export default class Node extends React.Component {
                     this.props.onClick()
                 }}
             >
-                <h1>{this.props.num}</h1>
+                <h1>{this.props.num.number}</h1>
             </button>
         )
     }
