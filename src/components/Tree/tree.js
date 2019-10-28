@@ -43,7 +43,6 @@ export default class Tree extends React.Component {
         let positions = arr.map((num, index) => {
             return { 'x': Math.floor(this.nodePosition(index, arr)), 'y': (this.depthOfIndex(index, arr) + 1.5) * 100 }
         });
-        console.log(positions,'x');
         return positions;
     }
 
