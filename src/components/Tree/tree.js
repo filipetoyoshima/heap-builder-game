@@ -6,11 +6,14 @@ export default class Tree extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            heap: false
+            heap: false,
+            selectedItem: ''
         }
     }
 
     depthOfIndex = (index, arr) => {
+/*         let results = { 0: 0, 1: 1, 2: 1, 3: 2, 4: 2, 5: 2, 6: 2, 7: 3, 8: 3, 9: 3, 10: 3, 11: 3, 12: 3, 13: 3, 14: 3, 15: 3 }
+        return results[index]; */
         return index === 0 ? 0 : 1 + this.depthOfIndex(Math.floor((index - 1) / 2), arr);
     }
 
@@ -22,7 +25,7 @@ export default class Tree extends React.Component {
 
         let constant = 1;
         for (let i = 0, j = 1; i < numbers.length; i++ , j = j + 2) {
-            if (arr[index] === numbers[i]) {
+            if (arr[index].number === numbers[i].number) {
                 constant = j;
             }
         }
@@ -36,8 +39,16 @@ export default class Tree extends React.Component {
         return (x * y) / z;
     }
 
+    allPositions = (arr) => {
+        let positions = arr.map((num, index) => {
+            return { 'x': Math.floor(this.nodePosition(index, arr)), 'y': (this.depthOfIndex(index, arr) + 1.5) * 100 }
+        });
+        return positions;
+    }
+
     render() {
-        const { heap } = this.props;
+        const { heap , initialArr} = this.props;
+        const positions = this.allPositions(initialArr);
         return (
             <div>
                 {
@@ -45,13 +56,13 @@ export default class Tree extends React.Component {
                         return (
                             <>
                                 <Node
-                                    onClick={() => { this.props.removeFromHeap(index) }}
+                                    onClick={() => { this.props.selectItem(index) }}
                                     key={index}
                                     i={index}
-                                    y={(this.depthOfIndex(index, heap) + 1.5) * 100}
-                                    x={this.nodePosition(index, heap)}
+                                    y={positions[index].y}
+                                    x={positions[index].x}
                                     num={num}
-                                    color={this.props.color}                                    
+                                    color={this.props.color}
                                 />
                                 {
                                     index >= 1 ?
@@ -66,10 +77,10 @@ export default class Tree extends React.Component {
                                             }}
                                         >
                                             <line
-                                                x1={this.nodePosition(Math.floor((index - 1) / 2), heap)}
-                                                y1={(this.depthOfIndex(Math.floor((index - 1) / 2), heap) + 1.5) * 100}
-                                                x2={this.nodePosition(index, heap)}
-                                                y2={(this.depthOfIndex(index, heap) + 1.5) * 100}
+                                                x1={positions[Math.floor((index - 1) / 2)].x}
+                                                y1={positions[Math.floor((index - 1) / 2)].y}
+                                                x2={positions[index].x}
+                                                y2={positions[index].y}
                                                 style={{
                                                     stroke: 'black',
                                                     strokeWidth: 3,
@@ -84,18 +95,6 @@ export default class Tree extends React.Component {
                     })
                 }
 
-                {/*                 {this.renderNode(1, 800, 800, this.HEIGHT, 0)}
-                <div style={{ zIndex: 9999 }}>
-                    <Button
-                        variant="contained"
-                        color="secondary"
-                        onClick={() => { this.setState({ heap: this.isHeap(this.state.values, 0, this.state.values.length) }) }}
-                        style={{ zIndex: 9999 }}
-                    >
-                        Check Heap!
-                    </Button>
-                    {this.state.heap ? <h1> Heap </h1> : <h1>No</h1>}
-                </div> */}
             </div >
         )
     }
